@@ -1,4 +1,26 @@
+<?php
+    session_start();
+    $db = mysqli_connect("localhost","root","kavya","Register");
 
+    if (isset($_POST['Registerbtn'])){
+        // session_start();
+        $username = ($_POST['username']);
+        $email =($_POST['email']);
+        $password = ($_POST['password']);
+        $password2 = ($_POST['password2']);
+
+        if ($password == $password2){
+             $password =md5($password);
+             $sql ="INSERT INTO users (username, email, password) VALUES ('$username' , '$email' , '$password')";
+             mysqli_query($db , $sql);
+             $_SESSION['message'] = "Succesfully logged in";
+             $_SESSION['username'] = $username;
+             header("location :home.php");
+            }else{
+                $_SESSION['message'] ="The password you entered does not match";
+            }
+    }
+?>
 
 <!DOCTYPE html>
 <html>
@@ -11,7 +33,7 @@
                <h3>Email Registration Form</h3>
                </div>
                <div class ="main">
-    <form>
+    <form method ="POST" action="Reg.php">
         <div id ="reg">
         <table>
             <tr>
@@ -29,7 +51,7 @@
             </tr>
             <tr>
             <td> Confirm Password :</td>   
-            <td><input type ="password" name ="confirm password"  class ="textInput" placeholder ="Type the same password"></td>
+            <td><input type ="password" name =" password2"  class ="textInput" placeholder ="Type the same password"></td>
             </tr>
             
            
